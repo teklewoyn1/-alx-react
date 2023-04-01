@@ -1,50 +1,38 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { StyleSheet, css } from "aphrodite";
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { StyleSheet, css } from 'aphrodite';
 
-const rowStyles = { backgroundColor: "#f5f5f5ab" };
-const headerRowStyles = { backgroundColor: "#deb5b545" };
-
-function CourseListRow({ isHeader, textFirstCell, textSecondCell }) {
-  let element;
-
-  const tableItemStyle = css(
-    isHeader ? styles.CourseListTh : styles.CourseListTd
-  );
+const CourseListRow = ({ isHeader, textFirstCell, textSecondCell }) => {
+  const bgColor1 = { backgroundColor: '#f5f5f5ab' };
+  const bgColor2 = { backgroundColor: '#deb5b545' };
+  let bgColor = undefined;
+  let content = undefined;
 
   if (isHeader === true) {
-    //
+    bgColor = bgColor2;
     if (textSecondCell === null) {
-      element = (
-        <th colSpan="2" className={css(styles.CourseListThSpan2)}>
-          {textFirstCell}
-        </th>
-      );
+      content = <th colSpan='2'>{textFirstCell}</th>;
     } else {
-      element = (
-        <>
-          <th className={tableItemStyle}>{textFirstCell}</th>
-          <th className={tableItemStyle}>{textSecondCell}</th>
-        </>
+      content = (
+        <Fragment>
+          <th className={css(styles.th)}>{textFirstCell}</th>
+          <th className={css(styles.th)}>{textSecondCell}</th>
+        </Fragment>
       );
     }
-    //
-  } else if (isHeader === false) {
-    element = (
-      <>
-        <td className={tableItemStyle}>{textFirstCell}</td>
-        <td className={tableItemStyle}>{textSecondCell}</td>
-      </>
+  }
+  if (isHeader === false) {
+    bgColor = bgColor1;
+    content = (
+      <Fragment>
+        <td>{textFirstCell}</td>
+        <td>{textSecondCell}</td>
+      </Fragment>
     );
   }
 
-  let isHeaderStyle;
-
-  if (isHeader) isHeaderStyle = headerRowStyles;
-  else isHeaderStyle = rowStyles;
-
-  return <tr style={isHeaderStyle}>{element}</tr>;
-}
+  return <tr style={bgColor}>{content}</tr>;
+};
 
 CourseListRow.defaultProps = {
   isHeader: false,
@@ -57,24 +45,11 @@ CourseListRow.propTypes = {
   textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-const cssVars = {
-  borderTableColor: "rgb(170, 170, 170);",
-};
-
 const styles = StyleSheet.create({
-  CourseListTh: {
-    borderTop: `1px solid ${cssVars.borderTableColor}`,
-    borderBottom: `1px solid ${cssVars.borderTableColor}`,
-    textAlign: "left",
-    fontSize: "18px",
-  },
-
-  CourseListThSpan2: {
-    textAlign: "center",
-  },
-
-  CourseListTd: {
-    textAlign: "left",
+  th: {
+    textAlign: 'left',
+    borderTop: '1px solid gray',
+    borderBottom: '1px solid gray',
   },
 });
 
